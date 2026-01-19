@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
     border: 0;
     box-sizing: border-box;
@@ -8,10 +10,11 @@
 body {
     align-items: center;
     background-color: #121212;
+    color: white;
     display: flex;
+    font-family: "Roboto", sans-serif;
     height: 100vh;
     justify-content: center;
-
 }
 
 .calculator {
@@ -32,9 +35,14 @@ body {
 }
 
 .box-display {
+    align-items: center;
     border: 1px solid white;
-    width: 100%;
+    display: flex;
+    font-size: 3rem;
     height: 100%;
+    padding: 1.5rem;
+    justify-content: flex-end;
+    width: 100%;
 }
 
 .container-buttons {
