@@ -1,6 +1,7 @@
 let number1 = 0;
 let operator = ""; 
-let number2 = 0; 
+let number2 = null; 
+let result = null;
 
 const display = document.querySelector(".box-display p");
 const buttonContainer = document.querySelector(".container-buttons");
@@ -45,21 +46,66 @@ function operate(a, operator, b) {
     return result;
 }
 
-function updateNumber(e) {
-	let newDigit = +(e.target.textContent); 
-	if (number1 == null) number1 = newDigit; // starting point      
-	else {
-        number1 *= 10 
-        number1 += newDigit; // display / number already has one digit or more
-    }
+function getNewNumber(text) {
+	let newDigit = +text; 
+	return number1 * 10 + newDigit;    
 } 
 
-function updateDisplay(e)  {
-    display.textContent = number1;
+function updateDisplay(num)  {
+    display.textContent = num;
 }
 
-buttonContainer.addEventListener("click", (e) => {
-    updateNumber(e);
-    updateDisplay(e);
-})
-	
+function isOperatorButton(button) {
+    return  button.classList.contains("add") ||
+            button.classList.contains("subtract") ||
+            button.classList.contains("multiply") ||
+            button.classList.contains("divide");
+}
+
+function isDigitButton(button) {
+    return "0123456789".includes(button.textContent);
+}
+
+function convertToOperator(symbol) {
+    switch(symbol) {
+        case "+":
+        case "-":
+        case "/":
+            return symbol;
+            break;
+        
+        case "×":
+            return "*";
+            break;
+    
+        default:
+            break;
+    }
+}
+
+function handleCalc(e) {
+    let buttonPressed = e.target;
+
+    if(operator === "") {
+
+        if(isDigitButton(buttonPressed)) {
+
+            if(result !== null) {
+                result = null;
+                number1 = 0;
+            } // display reset after finishing a calculation with =
+
+            number1 = getNewNumber(buttonPressed.textContent);
+            updateDisplay(number1);
+            
+        } else {
+            
+        }
+    }
+
+    else {
+        
+    }
+}
+
+buttonContainer.addEventListener("click", handleCalc);
