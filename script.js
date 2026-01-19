@@ -46,20 +46,21 @@ function operate(a, operator, b) {
     return result;
 }
 
-function getNewNumber(text) {
+function getNewNumber(text, num) {
 	let newDigit = +text; 
-	return number1 * 10 + newDigit;    
+	return num * 10 + newDigit;    
 } 
 
 function updateDisplay(num)  {
     display.textContent = num;
 }
 
-function isOperatorButton(button) {
+function isOperatorOrEqualsButton(button) {
     return  button.classList.contains("add") ||
             button.classList.contains("subtract") ||
             button.classList.contains("multiply") ||
-            button.classList.contains("divide");
+            button.classList.contains("divide") ||
+            button.classList.contains("equals");
 }
 
 function isDigitButton(button) {
@@ -78,6 +79,8 @@ function convertToOperator(symbol) {
             return "*";
             break;
     
+        case "=":
+            return "";
         default:
             break;
     }
@@ -86,25 +89,59 @@ function convertToOperator(symbol) {
 function handleCalc(e) {
     let buttonPressed = e.target;
 
-    if(operator === "") {
+    if(operator === "") { // pre op (number1 inputted)
 
         if(isDigitButton(buttonPressed)) {
 
             if(result !== null) {
-                result = null;
+                result = null; 
                 number1 = 0;
             } // display reset after finishing a calculation with =
 
-            number1 = getNewNumber(buttonPressed.textContent);
+            number1 = getNewNumber(buttonPressed.textContent, number1);
             updateDisplay(number1);
             
-        } else {
+        }
+        
+        else if(isOperatorOrEqualsButton(buttonPressed)) {
+            // so calculation doesnt make it to the reset display block above
+            if(result !== null) result = null; 
+            
+            operator = convertToOperator(buttonPressed.textContent);
             
         }
+
     }
 
-    else {
+    else { // post op (number2 inputted)
         
+        if(isDigitButton(buttonPressed)) {
+
+            if (number2 === null) {
+                number2 = 0;
+                updateDisplay("");
+            } 
+            
+            number2 = getNewNumber(buttonPressed.textContent, number2);
+            updateDisplay(number2); 
+
+        }
+
+        else if(isOperatorOrEqualsButton(buttonPressed)) {
+            // so calculation doesnt make it to the reset display block above
+            if(result !== null) result = null; 
+
+            if(number2 === null) operator = convertToOperator(buttonPressed.textContent);
+            else {
+                result = operate(number1, operator, number2);
+                number1 = result;
+                number2 = null;
+                operator = convertToOperator(buttonPressed.textContent);
+                updateDisplay(result);
+            }
+
+        }
+
     }
 }
 
