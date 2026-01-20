@@ -196,7 +196,7 @@ function handleCalc(e) {
 }
 
 function displayDivisionByZeroError() {
-    updateDisplay("Error! Can't divide by 0.");   
+    updateDisplay("Oops! Can't do that :(");   
 }
 
 function resetDisplay() {
