@@ -4,9 +4,13 @@ let number2 = null;
 let result = null;
 
 const display = document.querySelector(".box-display p");
+const defaultDisplayFontSize = "3rem";
 const buttonContainer = document.querySelector(".container-buttons");
+const clearButton = document.querySelector(".clear");
 
 const MAX_DISPLAY_LENGTH = 15; // characters
+
+const DIVSION_BY_ZERO_FLAG = "/0;" 
 
 function add(a, b) {
     return a + b;
@@ -41,7 +45,7 @@ function operate(a, operator, b) {
             break;
     
         case "/":
-            result = divide(a, b);
+            result = b === 0 ? DIVSION_BY_ZERO_FLAG : divide(a, b);
             break;
     }
 
@@ -153,6 +157,18 @@ function handleCalc(e) {
             else {
                 result = operate(number1, operator, number2);
 
+                if(result === DIVSION_BY_ZERO_FLAG) { // handle division by zero
+
+                    display.style.fontSize = "2.5rem";
+                    displayDivisionByZeroError();
+                    setTimeout(() => {
+                        clearData();
+                        display.style.fontSize = defaultDisplayFontSize;
+                    }, 1000);
+                    
+                    return;
+                } 
+
                 if(String(result).length > MAX_DISPLAY_LENGTH) { // prevent overflow
                     // -1 accounts for decimal point .
                     result = round(result, MAX_DISPLAY_LENGTH - getIntegerLength(result) - 1)
@@ -168,6 +184,10 @@ function handleCalc(e) {
         }
 
     }
+}
+
+function displayDivisionByZeroError() {
+    updateDisplay("Error! Can't divide by 0.");   
 }
 
 function clearData() {
