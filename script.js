@@ -89,6 +89,7 @@ function convertToOperator(symbol) {
     
         case "=":
             return "";
+            
         default:
             break;
     }
