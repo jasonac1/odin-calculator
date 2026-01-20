@@ -51,8 +51,9 @@ function getNewNumber(text, num) {
 	return num * 10 + newDigit;    
 } 
 
-function updateDisplay(num)  {
-    display.textContent = num;
+function updateDisplay(num) {
+    const maxDecimalPlaces = 14; 
+    display.textContent = round(num, maxDecimalPlaces);
 }
 
 function isOperatorOrEqualsButton(button) {
@@ -86,6 +87,10 @@ function convertToOperator(symbol) {
     }
 }
 
+function round(num, maxPlaces) {
+    return +(num.toFixed(maxPlaces)); // no parseFloat because num is Number, not String
+}
+
 function handleCalc(e) {
     let buttonPressed = e.target;
 
@@ -117,11 +122,7 @@ function handleCalc(e) {
         
         if(isDigitButton(buttonPressed)) {
 
-            if (number2 === null) {
-                number2 = 0;
-                updateDisplay("");
-            } 
-            
+            if (number2 === null) number2 = 0; 
             number2 = getNewNumber(buttonPressed.textContent, number2);
             updateDisplay(number2); 
 
