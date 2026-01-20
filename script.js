@@ -170,4 +170,18 @@ function handleCalc(e) {
     }
 }
 
+function clearData() {
+    number1 = 0;
+    operator = ""; 
+    number2 = null; 
+    result = null;
+    updateDisplay(0);
+}
+
+function handleClearData(e) {
+    let buttonPressed = e.target;
+    if(buttonPressed.classList.contains("clear")) clearData();
+}
+
 buttonContainer.addEventListener("click", handleCalc);
+buttonContainer.addEventListener("click", handleClearData);
