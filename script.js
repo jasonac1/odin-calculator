@@ -6,6 +6,8 @@ let result = null;
 const display = document.querySelector(".box-display p");
 const buttonContainer = document.querySelector(".container-buttons");
 
+const MAX_DISPLAY_LENGTH = 15; // characters
+
 function add(a, b) {
     return a + b;
 }
@@ -52,8 +54,13 @@ function getNewNumber(text, num) {
 } 
 
 function updateDisplay(num) {
-    const maxDecimalPlaces = 14; 
-    display.textContent = round(num, maxDecimalPlaces);
+    // const MAX_DISPLAY_LENGTH = 16;
+    // const maxDisplayDigits = MAX_DISPLAY_LENGTH - 1; // integer part + decimal part ( not counting . )
+    // const integerLength = getIntegerLength(num);
+    // const maxDecimalPlaces = MAX_DISPLAY_DIGITS - integerLength;
+
+    // display.textContent = round(num, maxDecimalPlaces);
+    display.textContent = num;
 }
 
 function isOperatorOrEqualsButton(button) {
@@ -91,12 +98,26 @@ function round(num, maxPlaces) {
     return +(num.toFixed(maxPlaces)); // no parseFloat because num is Number, not String
 }
 
+function getIntegerLength(num) {
+    const numAsString = String(num);
+    const integerPartOfString = numAsString.split(".")[0]; 
+    const integerLength = integerPartOfString
+    .split("")
+    .reduce((total, char) => {
+        return "0123456789".includes(char) ? total + 1 : total; // ignores minus sign
+    }, 0);
+
+    return integerLength;
+}
+
 function handleCalc(e) {
     let buttonPressed = e.target;
 
     if(operator === "") { // pre op (number1 inputted)
 
         if(isDigitButton(buttonPressed)) {
+
+            if(getIntegerLength(number1) >= MAX_DISPLAY_LENGTH) return; // prevent overflow
 
             if(result !== null) {
                 result = null; 
@@ -122,6 +143,8 @@ function handleCalc(e) {
         
         if(isDigitButton(buttonPressed)) {
 
+            if(getIntegerLength(number2) >= MAX_DISPLAY_LENGTH) return; // prevent overflow
+
             if (number2 === null) number2 = 0; 
             number2 = getNewNumber(buttonPressed.textContent, number2);
             updateDisplay(number2); 
@@ -135,9 +158,16 @@ function handleCalc(e) {
             if(number2 === null) operator = convertToOperator(buttonPressed.textContent);
             else {
                 result = operate(number1, operator, number2);
+
+                if(String(result).length > MAX_DISPLAY_LENGTH) { // prevent overflow
+                    // -1 accounts for decimal point .
+                    result = round(result, MAX_DISPLAY_LENGTH - getIntegerLength(result) - 1)
+                }
+
                 number1 = result;
                 number2 = null;
                 operator = convertToOperator(buttonPressed.textContent);
+
                 updateDisplay(result);
             }
 
