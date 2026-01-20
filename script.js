@@ -173,7 +173,6 @@ function handleCalc(e) {
                         enableCalculator();
                     }, ERROR_TIMEOUT);
                     
-
                     return;
 
                 } 
