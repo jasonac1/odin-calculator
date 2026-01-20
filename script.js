@@ -211,12 +211,14 @@ function clearCalculatorState() {
     resetDisplay(); 
 }
 
+function handleClearCalculatorState(e) {
+    let buttonPressed = e.target;
+    if(buttonPressed.classList.contains("clear")) clearCalculatorState();
+}
+
 function enableCalculator() {
     buttonContainer.addEventListener("click", handleCalc);
-    buttonContainer.addEventListener("click", (e) => {
-        let buttonPressed = e.target;
-        if(buttonPressed.classList.contains("clear")) clearCalculatorState();
-    });
+    buttonContainer.addEventListener("click", handleClearCalculatorState);
 }
 
 enableCalculator();
