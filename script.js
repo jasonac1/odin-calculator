@@ -89,7 +89,7 @@ function convertToOperator(symbol) {
     
         case "=":
             return "";
-            
+
         default:
             break;
     }
@@ -211,8 +211,12 @@ function clearCalculatorState() {
     resetDisplay(); 
 }
 
-buttonContainer.addEventListener("click", handleCalc);
-buttonContainer.addEventListener("click", (e) => {
-    let buttonPressed = e.target;
-    if(buttonPressed.classList.contains("clear")) clearCalculatorState();
-});
+function enableCalculator() {
+    buttonContainer.addEventListener("click", handleCalc);
+    buttonContainer.addEventListener("click", (e) => {
+        let buttonPressed = e.target;
+        if(buttonPressed.classList.contains("clear")) clearCalculatorState();
+    });
+}
+
+enableCalculator();
