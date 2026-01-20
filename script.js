@@ -162,14 +162,18 @@ function handleCalc(e) {
 
                 if(result === DIVSION_BY_ZERO_FLAG) { // handle division by zero
 
+                    disableCalculator();
+                    
                     display.style.fontSize = "2.5rem";
                     displayDivisionByZeroError();
 
                     setTimeout(() => {
                         clearCalculatorState();
                         display.style.fontSize = defaultDisplayFontSize;
+                        enableCalculator();
                     }, ERROR_TIMEOUT);
                     
+
                     return;
 
                 } 
