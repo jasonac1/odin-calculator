@@ -10,7 +10,9 @@ const clearButton = document.querySelector(".clear");
 
 const MAX_DISPLAY_LENGTH = 15; // characters
 
-const DIVSION_BY_ZERO_FLAG = "/0;" 
+const DIVSION_BY_ZERO_FLAG = "/0;"
+
+const ERROR_TIMEOUT = 1000; // ms  
 
 function add(a, b) {
     return a + b;
@@ -161,12 +163,14 @@ function handleCalc(e) {
 
                     display.style.fontSize = "2.5rem";
                     displayDivisionByZeroError();
+
                     setTimeout(() => {
-                        clearData();
+                        clearCalculatorState();
                         display.style.fontSize = defaultDisplayFontSize;
-                    }, 1000);
+                    }, ERROR_TIMEOUT);
                     
                     return;
+
                 } 
 
                 if(String(result).length > MAX_DISPLAY_LENGTH) { // prevent overflow
@@ -190,18 +194,24 @@ function displayDivisionByZeroError() {
     updateDisplay("Error! Can't divide by 0.");   
 }
 
+function resetDisplay() {
+    updateDisplay(0);
+}
+
 function clearData() {
     number1 = 0;
     operator = ""; 
     number2 = null; 
     result = null;
-    updateDisplay(0);
 }
 
-function handleClearData(e) {
-    let buttonPressed = e.target;
-    if(buttonPressed.classList.contains("clear")) clearData();
+function clearCalculatorState() {
+    clearData();
+    resetDisplay(); 
 }
 
 buttonContainer.addEventListener("click", handleCalc);
-buttonContainer.addEventListener("click", handleClearData);
+buttonContainer.addEventListener("click", (e) => {
+    let buttonPressed = e.target;
+    if(buttonPressed.classList.contains("clear")) clearCalculatorState();
+});
