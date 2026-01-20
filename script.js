@@ -221,4 +221,9 @@ function enableCalculator() {
     buttonContainer.addEventListener("click", handleClearCalculatorState);
 }
 
+function disableCalculator() {
+    buttonContainer.removeEventListener("click", handleCalc);
+    buttonContainer.removeEventListener("click", handleClearCalculatorState);
+}
+
 enableCalculator();
