@@ -54,12 +54,6 @@ function getNewNumber(text, num) {
 } 
 
 function updateDisplay(num) {
-    // const MAX_DISPLAY_LENGTH = 16;
-    // const maxDisplayDigits = MAX_DISPLAY_LENGTH - 1; // integer part + decimal part ( not counting . )
-    // const integerLength = getIntegerLength(num);
-    // const maxDecimalPlaces = MAX_DISPLAY_DIGITS - integerLength;
-
-    // display.textContent = round(num, maxDecimalPlaces);
     display.textContent = num;
 }
 
