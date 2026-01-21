@@ -95,10 +95,6 @@ function isDigitButton(button) {
     return "0123456789".includes(button.textContent);
 }
 
-function getButtonPressedText(button) {
-    return button.textContent;
-}
-
 function convertToOperator(symbol) {
     switch(symbol) {
         case "+":
@@ -177,7 +173,7 @@ function handleCalc(e) {
             
         }
 
-        else if(getButtonPressedText(buttonPressed) === "±") {
+        else if(buttonPressed.classList.contains("sign")) {
             
             if(number1 !== 0) {
                 number1 = -number1;
@@ -187,7 +183,7 @@ function handleCalc(e) {
             
         }
 
-        else if(getButtonPressedText(buttonPressed) === ".") {
+        else if(buttonPressed.classList.contains("decimal")) {
 
             // can't do 14 int + 1 decimal
             // (because the decimal point makes it 16 length, greater than max)
@@ -269,7 +265,7 @@ function handleCalc(e) {
 
         }
 
-        else if(getButtonPressedText(buttonPressed) === "±") {
+        else if(buttonPressed.classList.contains("sign")) {
             
             if(number2 !== 0 && number2 !== null) {
                 number2 = -number2;
@@ -279,7 +275,7 @@ function handleCalc(e) {
             
         }
 
-        else if(getButtonPressedText(buttonPressed) === ".") {
+        else if(buttonPressed.classList.contains("decimal")) {
 
             if(number2 === null) return; // prevent pressing . without integer part
 
