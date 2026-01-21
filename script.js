@@ -75,6 +75,10 @@ function isDigitButton(button) {
     return "0123456789".includes(button.textContent);
 }
 
+function getButtonPressedText(button) {
+    return button.textContent;
+}
+
 function convertToOperator(symbol) {
     switch(symbol) {
         case "+":
@@ -138,7 +142,7 @@ function handleCalc(e) {
             
         }
 
-        else if(buttonPressed.textContent === "±") {
+        else if(getButtonPressedText(buttonPressed) === "±") {
             
             if(number1 !== 0) {
                 number1 = -number1;
@@ -200,7 +204,7 @@ function handleCalc(e) {
 
         }
 
-        else if(buttonPressed.textContent === "±") {
+        else if(getButtonPressedText(buttonPressed) === "±") {
             
             if(number2 !== 0 && number2 !== null) {
                 number2 = -number2;
