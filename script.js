@@ -138,6 +138,15 @@ function handleCalc(e) {
             
         }
 
+        else if(buttonPressed.textContent === "±") {
+            
+            if(number1 !== 0) {
+                number1 = -number1;
+                updateDisplay(number1);
+            }
+            
+        }
+
     }
 
     else { // post op (number2 inputted)
@@ -189,6 +198,15 @@ function handleCalc(e) {
                 updateDisplay(result);
             }
 
+        }
+
+        else if(buttonPressed.textContent === "±") {
+            
+            if(number2 !== 0 && number2 !== null) {
+                number2 = -number2;
+                updateDisplay(number2);
+            }
+            
         }
 
     }
