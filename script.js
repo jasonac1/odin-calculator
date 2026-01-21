@@ -1,7 +1,13 @@
 let number1 = 0;
 let operator = ""; 
-let number2 = null; 
+let number2 = null;
 let result = null;
+
+let stringNumber1 = "0"; // string representations of numbers 1 and 2
+let stringNumber2 = null;
+ 
+let decimalFlag = false;
+let displayIsWellFormedDecimal = false; // e.g. "2."
 
 const display = document.querySelector(".box-display p");
 const defaultDisplayFontSize = "3rem";
@@ -54,9 +60,23 @@ function operate(a, operator, b) {
     return result;
 }
 
-function getNewNumber(text, num) {
-	let newDigit = +text; 
-	return num * 10 + newDigit;    
+function getNewNumber(text, num, strNum, localDecimalFlag, localDisplayIsWellFormedDecimal) {
+    let numberRep = 0;
+    let stringRep = "";  
+
+	let newDigit = +text;
+    if(localDecimalFlag === false) { // integer
+        stringRep = num !== 0 ? strNum + String(newDigit) : String(newDigit);   
+    }
+
+	else { // decimal
+        if(localDisplayIsWellFormedDecimal === false) displayIsWellFormedDecimal = true; // (e.g 2.)
+        stringRep = strNum + String(newDigit);
+    } 
+
+    numberRep = Number(stringRep);
+        
+    return [numberRep, stringRep];
 } 
 
 function updateDisplay(num) {
@@ -115,6 +135,15 @@ function getIntegerLength(num) {
     return integerLength;
 }
 
+function IsWellFormedDecimal(string) {
+    return string.split(".")[1] !== ""; // if decimal part is not empty
+}
+
+function flipSignInString(string) {
+    return !string.includes("-") ?
+    "-" + string : string.replace("-", "");
+}
+
 function handleCalc(e) {
     let buttonPressed = e.target;
 
@@ -122,19 +151,25 @@ function handleCalc(e) {
 
         if(isDigitButton(buttonPressed)) {
 
-            if(getIntegerLength(number1) >= MAX_DISPLAY_LENGTH) return; // prevent overflow
+            if(String(number1).length >= MAX_DISPLAY_LENGTH) return; // prevent overflow
 
             if(result !== null) {
                 result = null; 
                 number1 = 0;
             } // display reset after finishing a calculation with =
 
-            number1 = getNewNumber(buttonPressed.textContent, number1);
-            updateDisplay(number1);
+            [number1, stringNumber1] = getNewNumber(buttonPressed.textContent, number1, stringNumber1, 
+            decimalFlag, displayIsWellFormedDecimal);
+            updateDisplay(stringNumber1);
             
         }
         
         else if(isOperatorOrEqualsButton(buttonPressed)) {
+
+            if(decimalFlag && !displayIsWellFormedDecimal) return;
+
+            resetDecimalFlags();
+
             // so calculation doesnt make it to the reset display block above
             if(result !== null) result = null; 
             
@@ -146,9 +181,25 @@ function handleCalc(e) {
             
             if(number1 !== 0) {
                 number1 = -number1;
-                updateDisplay(number1);
+                stringNumber1 = flipSignInString(stringNumber1);
+                updateDisplay(stringNumber1);
             }
             
+        }
+
+        else if(getButtonPressedText(buttonPressed) === ".") {
+
+            // can't do 14 int + 1 decimal
+            // (because the decimal point makes it 16 length, greater than max)
+            if(display.textContent.length >= MAX_DISPLAY_LENGTH - 1) return;
+
+	        if(decimalFlag === false) {
+                decimalFlag = true;
+                displayIsWellFormedDecimal = false;
+                stringNumber1 += ".";
+                updateDisplay(stringNumber1);
+            }
+
         }
 
     }
@@ -157,15 +208,21 @@ function handleCalc(e) {
         
         if(isDigitButton(buttonPressed)) {
 
-            if(getIntegerLength(number2) >= MAX_DISPLAY_LENGTH) return; // prevent overflow
+            if(String(number2).length >= MAX_DISPLAY_LENGTH) return; // prevent overflow
 
             if (number2 === null) number2 = 0; 
-            number2 = getNewNumber(buttonPressed.textContent, number2);
-            updateDisplay(number2); 
+            [number2, stringNumber2] = getNewNumber(buttonPressed.textContent, number2, stringNumber2,
+            decimalFlag, displayIsWellFormedDecimal);
+            updateDisplay(stringNumber2); 
 
         }
 
         else if(isOperatorOrEqualsButton(buttonPressed)) {
+
+            if(decimalFlag && !displayIsWellFormedDecimal) return;
+
+            resetDecimalFlags();
+
             // so calculation doesnt make it to the reset display block above
             if(result !== null) result = null; 
 
@@ -196,8 +253,16 @@ function handleCalc(e) {
                 }
 
                 number1 = result;
+                stringNumber1 = String(number1);
                 number2 = null;
+                stringNumber2 = null;
                 operator = convertToOperator(buttonPressed.textContent);
+
+                // checks if decimal every time you get result
+                if(!Number.isInteger(result)) {
+                    decimalFlag = true;
+                    displayIsWellFormedDecimal = true;   
+                }
 
                 updateDisplay(result);
             }
@@ -208,9 +273,27 @@ function handleCalc(e) {
             
             if(number2 !== 0 && number2 !== null) {
                 number2 = -number2;
-                updateDisplay(number2);
+                stringNumber2 = flipSignInString(stringNumber2);
+                updateDisplay(stringNumber2);
             }
             
+        }
+
+        else if(getButtonPressedText(buttonPressed) === ".") {
+
+            if(number2 === null) return; // prevent pressing . without integer part
+
+            // can't do 14 int + 1 decimal
+            // (because the decimal point makes it 16 length, greater than max)
+            if(display.textContent.length >= MAX_DISPLAY_LENGTH - 1) return;
+
+	        if(decimalFlag === false) {
+                decimalFlag = true;
+                displayIsWellFormedDecimal = false;
+                stringNumber2 += ".";
+                updateDisplay(stringNumber2);
+            }
+
         }
 
     }
@@ -224,11 +307,17 @@ function resetDisplay() {
     updateDisplay(0);
 }
 
+function resetDecimalFlags() {
+    displayIsWellFormedDecimal = false;
+    decimalFlag = false;
+}
+
 function clearData() {
     number1 = 0;
     operator = ""; 
     number2 = null; 
     result = null;
+    resetDecimalFlags();
 }
 
 function clearCalculatorState() {
