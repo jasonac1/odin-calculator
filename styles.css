@@ -12,9 +12,20 @@ body {
     background-color: #121212;
     color: white;
     display: flex;
+    flex-direction: column;
     font-family: "Roboto", sans-serif;
     height: 100vh;
     justify-content: center;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.intro {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
 }
 
 .calculator {
