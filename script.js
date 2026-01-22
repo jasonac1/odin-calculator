@@ -171,7 +171,7 @@ function handleCalc(e) {
 
         if(isDigitButton(buttonPressed)) {
 
-            if(String(number1).length >= MAX_DISPLAY_LENGTH) return; // prevent overflow
+            if(stringNumber1.length >= MAX_DISPLAY_LENGTH) return; // prevent overflow
 
             if(result !== null) {
                 result = null; 
@@ -234,13 +234,15 @@ function handleCalc(e) {
     else { // post op (number2 inputted)
         
         if(isDigitButton(buttonPressed)) {
-
-            if(String(number2).length >= MAX_DISPLAY_LENGTH) return; // prevent overflow
-
+            
             if (number2 === null) {
                 number2 = 0;
-                resetDecimalFlags();   
-            } 
+                resetDecimalFlags();
+                stringNumber2 = "0"; // define first so can read length  
+            }
+            
+            if(stringNumber2.length >= MAX_DISPLAY_LENGTH) return; // prevent overflow
+
             [number2, stringNumber2] = getNewNumber(buttonPressed.textContent, number2, stringNumber2,
             decimalFlag, displayIsWellFormedDecimal);
             updateDisplay(stringNumber2); 
@@ -279,7 +281,9 @@ function handleCalc(e) {
 
                 if(String(result).length > MAX_DISPLAY_LENGTH) { // prevent overflow
                     // -1 accounts for decimal point .
-                    result = round(result, MAX_DISPLAY_LENGTH - getIntegerLength(result) - 1)
+                    let decimalPointMarker = decimalFlag ? 1 : 0
+
+                    result = round(result, MAX_DISPLAY_LENGTH - getIntegerLength(result) - decimalPointMarker)
                 }
 
                 number1 = result;
@@ -356,6 +360,8 @@ function clearData() {
     operator = ""; 
     number2 = null; 
     result = null;
+    stringNumber1 = "0"; 
+    stringNumber2 = null;
     resetDecimalFlags();
 }
 
