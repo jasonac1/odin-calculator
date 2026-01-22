@@ -140,6 +140,10 @@ function flipSignInString(string) {
     "-" + string : string.replace("-", "");
 }
 
+function strPop(string) {
+    return string.slice(0, string.length - 1);   
+}
+
 function handleCalc(e) {
     let buttonPressed = e.target;
 
@@ -195,6 +199,13 @@ function handleCalc(e) {
                 stringNumber1 += ".";
                 updateDisplay(stringNumber1);
             }
+
+        }
+
+        else if(buttonPressed.classList.contains("delete")) {
+
+        [number1, stringNumber1] = backspace(number1, stringNumber1);
+        updateDisplay(stringNumber1);   
 
         }
 
@@ -292,6 +303,15 @@ function handleCalc(e) {
 
         }
 
+        else if(buttonPressed.classList.contains("delete")) {
+
+            if(number2 === null) return; // prevent pressing backspace before entering number2 
+
+            [number2, stringNumber2] = backspace(number2, stringNumber2);
+            updateDisplay(stringNumber2);   
+
+        }
+
     }
 }
 
@@ -324,6 +344,52 @@ function clearCalculatorState() {
 function handleClearCalculatorState(e) {
     let buttonPressed = e.target;
     if(buttonPressed.classList.contains("clear")) clearCalculatorState();
+}
+
+function backspace(num, strNum) {
+    let numberRep = 0;
+    let stringRep = "0";
+    const decimalPartOfString = strNum.split(".")[1];
+
+    if(strNum === "0");
+
+    // e.g. "3"
+    else if(decimalFlag === false && strNum.length === 1) {
+        stringRep = "0";
+        numberRep = Number(stringRep);
+    }
+
+    // e.g. "314"
+    else if(decimalFlag === false && strNum.length > 1) {
+        stringRep = strPop(strNum);
+        numberRep = Number(stringRep);
+    }
+
+    // e.g. "3."
+    else if(decimalFlag === true && displayIsWellFormedDecimal === false) {
+        stringRep = strPop(strNum);
+        numberRep = Number(stringRep);
+        decimalFlag = false;
+    }
+
+    // e.g. "3.1"
+    else if(decimalFlag === true
+        && displayIsWellFormedDecimal === true
+        && decimalPartOfString.length === 1) {
+        stringRep = strPop(strNum);
+        numberRep = Number(stringRep);
+        displayIsWellFormedDecimal = false;
+    }
+
+    // e.g. "3.14"
+    else if(decimalFlag === true
+        && displayIsWellFormedDecimal === true
+        && decimalPartOfString.length > 1) {
+        stringRep = strPop(strNum);
+        numberRep = Number(stringRep);
+    }
+
+    return [numberRep, stringRep];
 }
 
 function enableCalculator() {
