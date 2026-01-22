@@ -73,18 +73,35 @@ h1 {
 
 button {
     aspect-ratio: 1 / 1;
-    background-color: black;
-    border: 1px solid white;
+    background-color: #222;
+    border-radius: 1rem;
     color: white;
     font-size: 2rem;
     width: 90px;
 }
 
 button:active {
-    background-color: #222;
+    background-color: #333;
 }
 
 .equals {
     height: calc(180px + 1rem); 
     /* occupies 2 flex items height + 1rem to account for gap */
+}
+
+.operator, .equals {
+    background-color: #d97d55;
+}
+
+.operator:active, .equals:active {
+    background-color: #ad4f27;
+}
+
+
+.special {
+    background-color: #777;
+}
+
+.special:active {
+    background-color: #535353;
 }
