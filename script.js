@@ -237,7 +237,10 @@ function handleCalc(e) {
 
             if(String(number2).length >= MAX_DISPLAY_LENGTH) return; // prevent overflow
 
-            if (number2 === null) number2 = 0; 
+            if (number2 === null) {
+                number2 = 0;
+                resetDecimalFlags();   
+            } 
             [number2, stringNumber2] = getNewNumber(buttonPressed.textContent, number2, stringNumber2,
             decimalFlag, displayIsWellFormedDecimal);
             updateDisplay(stringNumber2); 
