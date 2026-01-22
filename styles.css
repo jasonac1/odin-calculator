@@ -83,6 +83,10 @@ button {
     width: 90px;
 }
 
+button:active {
+    background-color: #222;
+}
+
 .equals {
     flex: 2;
     /* flex: 2; no aspect ratio because this needs to stretch a length of (2 + gap) buttons */
