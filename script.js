@@ -123,11 +123,8 @@ function convertToOperator(symbol) {
         case "+":
         case "-":
         case "/":
+        case "*":
             return symbol;
-            break;
-        
-        case "×":
-            return "*";
             break;
     
         case "=":
