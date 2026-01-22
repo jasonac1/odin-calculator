@@ -18,7 +18,30 @@ const MAX_DISPLAY_LENGTH = 15; // characters
 
 const DIVSION_BY_ZERO_FLAG = "/0;"
 
-const ERROR_TIMEOUT = 1000; // ms  
+const ERROR_TIMEOUT = 1000; // ms
+
+const keyClassMap = {
+    "0": "zero",
+    "1": "one",
+    "2": "two",
+    "3": "three",
+    "4": "four",
+    "5": "five",
+    "6": "six",
+    "7": "seven",
+    "8": "eight",
+    "9": "nine",
+    "+": "add",
+    "-": "subtract",
+    "*": "multiply",
+    "/": "divide",
+    "=": "equals",
+    "enter": "equals",
+    "c": "clear",
+    "q": "sign",
+    "backspace": "delete",
+    ".": "decimal",
+}  
 
 function add(a, b) {
     return a + b;
@@ -403,3 +426,14 @@ function disableCalculator() {
 }
 
 enableCalculator();
+
+document.addEventListener("keydown", (e) => {
+    const buttonToBePressed = document.querySelector(`.${keyClassMap[e.key.toLowerCase()]}`);
+    if(buttonToBePressed !== null) {
+        const click = new Event("click", {bubbles: true});
+        buttonToBePressed.dispatchEvent(click, (e) => {
+            handleCalc(e);
+            handleClearCalculatorState(e);
+        });
+    }
+});
